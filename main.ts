@@ -19,12 +19,13 @@ function makeAGuess () {
         guess = game.askForString("Please guess a letter you didn't already guess", 1)
     }
     if (secretWord.includes(guess)) {
+        progressMessage = "'" + guess + "' is in the word"
         guessedLetters.push(guess)
         info.changeScoreBy(updateCurrenGuess(guess))
     } else {
+        progressMessage = "'" + guess + "' is not in the word"
         guessedLetters.push(guess)
         info.changeLifeBy(-1)
-        game.showLongText("The secret word does not contain the letter " + guess, DialogLayout.Bottom)
     }
 }
 function getCurrentGuess () {
@@ -37,6 +38,7 @@ function getCurrentGuess () {
 let currentGuessString = ""
 let count = 0
 let guess = ""
+let progressMessage = ""
 let secretWord = ""
 let guessedLetters: string[] = []
 let currentGuess: string[] = []
@@ -44,10 +46,12 @@ currentGuess = []
 guessedLetters = []
 info.setScore(0)
 info.setLife(5)
-secretWord = "again"
+secretWord = "coding"
+progressMessage = "Guess a " + secretWord.length + " letter word"
 initCurrentGuess()
+game.splash("Welcome to WordGuesser", "by:Elie Florea")
 while (true) {
-    game.showLongText(getCurrentGuess(), DialogLayout.Bottom)
+    game.showLongText("Word: " + getCurrentGuess() + ("\\n" + progressMessage), DialogLayout.Bottom)
     if (game.ask("Guess a letter", "Guess whole word")) {
         makeAGuess()
         if (info.score() == secretWord.length) {
@@ -59,6 +63,7 @@ while (true) {
             info.setScore(secretWord.length)
             game.over(true)
         } else {
+            progressMessage = "Wrong guess try again!"
             info.changeLifeBy(-1)
         }
     }
